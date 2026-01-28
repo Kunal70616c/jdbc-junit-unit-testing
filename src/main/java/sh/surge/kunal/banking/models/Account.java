@@ -1,4 +1,4 @@
-package com.cognizant.banking.models;
+package sh.surge.kunal.banking.models;
 
 import java.time.LocalDate;
 

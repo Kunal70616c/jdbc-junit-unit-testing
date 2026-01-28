@@ -1,23 +1,20 @@
-package com.cognizant.banking.utils;
+package sh.surge.kunal.banking.utils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Stream;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import com.cognizant.banking.configurations.AppConfig;
-import com.cognizant.banking.models.Customer;
-import com.cognizant.banking.models.FullName;
-import com.cognizant.banking.repositories.CustomerRepositoryImpl;
-import com.cognizant.banking.services.CustomerService;
+import sh.surge.kunal.banking.configurations.AppConfig;
+import sh.surge.kunal.banking.models.Customer;
+import sh.surge.kunal.banking.models.FullName;
+import sh.surge.kunal.banking.repositories.CustomerRepositoryImpl;
 import com.github.javafaker.Faker;
 
 public class CustomerApp {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
         Faker faker = new Faker();
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 		CustomerRepositoryImpl customerRepository = context.getBean(CustomerRepositoryImpl.class);
@@ -29,11 +26,8 @@ public class CustomerApp {
 		customer.setEmail(faker.internet().emailAddress());
 		customer.setContactNo(Long.parseLong(faker.phoneNumber().subscriberNumber(10)));
 		customer.setPassword(faker.internet().password(8, 10, true, true, true));
-		/*
-		 * boolean isAdded = customerRepository.addCustomer(customer); if(isAdded) {
-		 * System.out.println("Customer added successfully!"); } else {
-		 * System.out.println("Failed to add customer."); }
-		 */
+
+        // Adding the customer to the database
 	  List<Long> accountNos=customerRepository.getAllCustomers()
 			  .stream().map(c->c.getAccountNo()).toList();
 	  long randomNo= accountNos.get(new Random().nextInt(accountNos.size()));

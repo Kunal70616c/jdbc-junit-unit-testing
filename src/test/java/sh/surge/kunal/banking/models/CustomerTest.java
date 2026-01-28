@@ -1,4 +1,4 @@
-package com.cognizant.banking.models;
+package sh.surge.kunal.banking.models;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +14,7 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.cognizant.banking.utils.CustomerApp;
+import sh.surge.kunal.banking.utils.CustomerApp;
 import com.github.javafaker.Faker;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,37 +23,44 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 public class CustomerTest {
-	
+
+    // Customer Object for Testing
 	private Customer customer;
+    // FullName Object for Testing
 	private FullName fullName;
+    // SavingsAccount Object for Testing
 	private SavingsAccount savingsAccount;
-	@BeforeEach
+
+    @BeforeEach // This annotation is used to run the setUp method before each test
+    // setUp is a method to initialize the objects
 	public void setUp() {
 		customer = new Customer();
 		fullName = new FullName();
 		
 	}
-	@Nested
+
+	@Nested // This annotation is used to group related tests
 	class FullNameTest{
-		@ParameterizedTest
-		@ValueSource(strings = {"John","A.","Doe"})
+		@ParameterizedTest // Perameterized Test is a test that runs multiple times with different inputs
+		@ValueSource(strings = {"John","A.","Doe"}) // @ValueSource is a provider that provides a list of values
 		public void testFullName(String firstName) {
 			fullName.setFirstName(firstName);			
-			assertAll(
-					() -> assertTrue(firstName.equals(fullName.getFirstName()))					
+			assertAll( // assertAll is used to run multiple assertions
+					() -> assertTrue(firstName.equals(fullName.getFirstName()))
+                        // assertTrue is used to check if the condition is true
 					);
 		}
 		
 	}
-	@Nested
+	@Nested // This annotation is used to group related tests
 	class AccountNoTest{
-		@Test
+		@Test // This annotation is used to run the test
 		public void testAccountNo() {
 			List<Long> accountNos = CustomerApp.getAllCustomers()
 					  .stream().map(c->c.getAccountNo()).toList();
-			assertAll(
+			assertAll( // assertAll is used to run multiple assertions
 					() -> assertTrue(accountNos.stream().allMatch(no -> no >= 1000000000L 
-					&& no <= 9999999999L)),
+					&& no <= 9999999999L)), // assertTrue
 					() -> assertEquals(5, accountNos.size()),
 					()-> assertFalse(accountNos.isEmpty())
 					);
@@ -65,28 +72,31 @@ public class CustomerTest {
 	@Nested
 	class EmailTest{
 		@ParameterizedTest
-		@MethodSource("com.cognizant.banking.models.CustomerTest#provideCustomers")
+		@MethodSource("sh.surge.kunal.banking.models.CustomerTest#provideCustomers")
 		public void testEmail(Customer customer) {
 			String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+            // assertTrue is used to check if the condition is true
 			assertTrue(customer.getEmail().matches(emailRegex));
 		}
 	}
 		
 	
 	
-	@Test
-	@RepeatedTest(3)
-	@DisplayName("Customer Object Not Null Test")
-	@Order(2)
-	@Tag("dev")
+	@RepeatedTest(3) // Annotation to run the test multiple times
+	@DisplayName("Customer Object Not Null Test") // Display name of the test
+	@Order(2) // Order is the order of the test execution
+	@Tag("dev") // Tag is used to group tests
 	public void testCustomerNotNull() {
+
+        // assertNotNull is used to check if the object is not null
 		assertNotNull(customer);
 	}
-	@ParameterizedTest	
+
+	@ParameterizedTest	// Parameterized Test is a test that runs multiple times with different inputs
 	@DisplayName("Customer Getters and Setters Test")
 	@Order(1)
-	@Tag("qa")
-	@CsvFileSource(resources = "/customer.csv", numLinesToSkip = 1)
+	@Tag("qa") // Tag is used to group tests
+	@CsvFileSource(resources = "/customer.csv", numLinesToSkip = 1) // @CsvFileSource is a provider that provides a list of values from a csv file
 	public void testGettersAndSetters(long accountNo,String firstName,String middleName,String lastName,
 			String email, String password,long contactNo) {
 		
@@ -98,7 +108,8 @@ public class CustomerTest {
 		customer.setEmail(email);
 		customer.setContactNo(contactNo);
 		customer.setPassword(password);
-		assertAll(
+		assertAll( // assertAll is used to run multiple assertions
+                // assertEquals is used to check if the values are equal
 				() -> assertEquals(accountNo, customer.getAccountNo()),
 				() -> assertEquals(firstName, customer.getFullName().getFirstName()),
 				() -> assertEquals(middleName, customer.getFullName().getMiddleName()),
@@ -125,9 +136,10 @@ public class CustomerTest {
 		
 		assertThrows(NullPointerException.class, ()->savingsAccount.getRoi());
 	}
-	@AfterEach
+	@AfterEach // @AfterEach is used to run the tearDown method after each test
 	public void tearDown() {
-		customer = null;
+
+        customer = null;
 	}
 
 	

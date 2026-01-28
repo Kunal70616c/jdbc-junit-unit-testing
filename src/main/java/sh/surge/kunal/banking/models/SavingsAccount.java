@@ -1,4 +1,4 @@
-package com.cognizant.banking.models;
+package sh.surge.kunal.banking.models;
 
 import org.springframework.stereotype.Component;
 
@@ -13,8 +13,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = false)
-@Component("currentAccount")
-public class CurrentAccount extends Account {
-	private float overDraftLimit;
+@Component("savingsAccount")
+public class SavingsAccount extends Account {
+	private float roi;
 
 }

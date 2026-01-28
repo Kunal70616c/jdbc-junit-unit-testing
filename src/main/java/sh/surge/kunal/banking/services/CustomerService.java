@@ -1,8 +1,8 @@
-package com.cognizant.banking.services;
+package sh.surge.kunal.banking.services;
 
 import org.springframework.stereotype.Service;
 
-import com.cognizant.banking.models.Customer;
+import sh.surge.kunal.banking.models.Customer;
 
 @Service
 public class CustomerService {
